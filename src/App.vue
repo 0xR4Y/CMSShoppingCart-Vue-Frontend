@@ -18,7 +18,7 @@ export default {
   methods:{
     ...mapActions(["setPagesAction","setCategoriesAction"]),
   },
-  async created(){
+  created(){
     this.setPagesAction();
     this.setCategoriesAction();
   },
