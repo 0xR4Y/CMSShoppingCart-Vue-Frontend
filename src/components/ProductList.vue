@@ -10,7 +10,7 @@
             <h3> {{p.name}} </h3>
             <p> {{p.description}} </p>
             <p> {{p.price | currency }}</p>
-            <p> <button class="btn btn-primary"> Add to Cart</button> </p>
+            <p> <button class="btn btn-primary" @click="handleAddProduct(p)"> Add to Cart</button> </p>
           </div>
        </div>
        <ProductPagination />
@@ -20,7 +20,7 @@
 
 <script>
 
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapMutations, mapState } from 'vuex';
 import CategoryList from "./CategoryList";
 import ProductPagination from "./ProductPagination";
 
@@ -32,14 +32,25 @@ export default {
   },
   methods:{
     ...mapActions(["setProductsByCategoryAction"]),
+    ...mapMutations(["setCurrentCategory","setCurrentPage"]),
+    ...mapMutations({
+      addProduct: "cart/addProduct"
+    }),
+    handleAddProduct(product){
+      this.addProduct(product);
+    },
   },
   created(){
+    this.setCurrentPage(1);
     const category = this.$route.params.category;
     this.setProductsByCategoryAction(category);
+    this.setCurrentCategory(category);
   },
   beforeRouteUpdate(to, from, next){
+    this.setCurrentPage(1);
     const category = to.params.category;
     this.setProductsByCategoryAction(category);
+    this.setCurrentCategory(category);
     next();
   }
 };

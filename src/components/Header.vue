@@ -15,24 +15,29 @@
       </li>
     </ul>
   </div>
+  <CartSummary />
 </nav>  
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import CartSummary from "./CartSummary";
+
 export default {
+
+  components:{ CartSummary },
   computed:{
     ...mapState(["pages"]),
-    pageContent(){
-      const slug = this.$route.params.slug ? this.$route.params.slug : "home";
-      const page = this.pages.fing(page => page.slug == slug);
+    // pageContent(){
+    //   const slug = this.$route.params.slug ? this.$route.params.slug : "home";
+    //   const page = this.pages.fing(page => page.slug == slug);
 
-      if(page){
-        return page.content;
-      } else{
-        return "";
-      }
-    }
+    //   if(page){
+    //     return page.content;
+    //   } else{
+    //     return "";
+    //   }
+    // }
   },
 };
 </script>
