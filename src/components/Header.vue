@@ -13,6 +13,9 @@
       <li class="nav-item active" v-for="(p,i) in pages" :key="i">
         <router-link class="nav-link" :to="'/' + p.slug">{{p.name}}</router-link>
       </li>
+      <li class="nav-item active">
+        <router-link class="nav-link" to="/admin">Admin</router-link>
+      </li>
     </ul>
   </div>
   <CartSummary />

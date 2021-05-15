@@ -5,7 +5,7 @@
         <div class="col-9">
             <h2 class="display-4">Your cart</h2>
             <table class="table table-borderd">
-                <thread>
+                <thead>
                     <tr>
                         <th>Product</th>
                         <th>Quantiry</th>
@@ -13,7 +13,7 @@
                         <th>Price</th>
                         <th>Subtotal</th>
                     </tr>
-                </thread>
+                </thead>
                 <tbody>
                     <tr v-if="itemCount == 0">
                         <td colspan="5" class="text-center">
@@ -24,13 +24,16 @@
                         <td> {{ c.product.name}} </td>
                         <td> {{ c.quantity}} </td>
                         <td>
-                            <button class="btn small btn-primary mx-1">
+                            <button class="btn small btn-primary mx-1" 
+                            @click="handleAddProduct(c.product)">
                                 +
                             </button>
-                            <button class="btn small btn-warning mx-1">
+                            <button class="btn small btn-warning mx-1"
+                            @click="handleSubtractProduct(c.product._id)">
                                 -
                             </button>
-                            <button class="btn small btn-danger mx-1">
+                            <button class="btn small btn-danger mx-1"
+                            @click="handleRemoveProduct(c.product._id)">
                                 remove
                             </button>
                         </td>
@@ -38,7 +41,7 @@
                         <td> {{ (c.product.price * c*quantity) | currency }} </td>
                     </tr>
                 </tbody>
-                <tfoor v-if="itemCount > 0">
+                <tfoot v-if="itemCount > 0">
                     <tr>
                         <td colspan="5" class="text-right">
                             <h4>Total: {{ totalPrice | currency}}</h4>
@@ -46,7 +49,7 @@
                     </tr> 
                     <tr>
                         <td colspan="5">
-                            <button class="btn btn-danger float-left">
+                            <button class="btn btn-danger float-left" @click="handleClearCart">
                                 Clear Cart
                             </button>
                             <router-link to="/checkout" class="btn btn-primary float-right">
@@ -54,7 +57,7 @@
                             </router-link>
                         </td>
                     </tr>
-                </tfoor>
+                </tfoot>
             </table>
         
         </div>
@@ -62,21 +65,43 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters,mapMutations,mapState} from "vuex";
 import CategoryList from "./CategoryList";
-import CategoryList from './CategoryList.vue';
-
 
 export default {
-    components:{ CategoryListCategoryList},
-
+   
+    components:{ CategoryList},
     computed:{
-        ...mapState({cart: state => state.cart.cart}),
+        ...mapState({ cart: state => state.cart.cart}),
         ...mapGetters({
             itemCount: "cart/itemCount",
             totalPrice: "cart/totalPrice",
         }),
     },
+    methods:{
+        ...mapMutations({
+            addProduct : "cart/addProduct",
+            subtractProduct: "cart/subtractProduct",
+            removeProduct: "cart/removeProduct",
+        }),
+        
+        ...mapActions({
+            clearCartData: "cart/clearCartData",
+        }),
+
+        handleAddProduct(product){
+            this.addProduct(product);
+        },
+        handleSubtractProduct(id){
+            this.subtractProduct(id);
+        },
+        handleRemoveProduct(id){
+            this.removeProduct(id);
+        },
+        handleClearCart(){
+            this.clearCartData();
+        }
+    }
 
 };
 </script>
