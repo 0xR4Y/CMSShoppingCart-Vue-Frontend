@@ -3,7 +3,9 @@
         <h2 class="text-center p-2">
             {{ editMode ? "Edit Product" : "Add Product" }}
         </h2>
-
+        <button class="btn btn-primary m-1" @click="addAPI">
+            Add Products from FakeStoreAPI
+        </button>
         <h4
             v-if="$v.$invalid && $v.$dirty"
             class="bg-danger text-white text-center p-2"
@@ -68,7 +70,7 @@
 <script>
 import { mapActions, mapState, mapMutations } from "vuex";
 import { required } from "vuelidate/lib/validators";
-
+import fetchedJSON from './API/API.js'
 export default {
     data() {
         return {
@@ -131,6 +133,20 @@ export default {
                 this.$router.push("/admin/products");
             }
         },
+        async addAPI(){ 
+            let temp = this; 
+            fetchedJSON.then(function(result){
+                result.forEach(async function(obj){
+                    const product = new FormData(); 
+                    product.append("name", obj.name);
+                    product.append("description", obj.description); 
+                    product.append("price", obj.price);
+                    product.append("category", obj.category);
+                    product.append("imageUpload", obj.image);
+                    await temp.addProduct(product); 
+                })
+            })
+        }
     },
     created() {
         if (this.editMode) {
